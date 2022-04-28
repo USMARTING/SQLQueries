@@ -1,0 +1,10 @@
+SELECT distinct SMS_R_System.Name 
+       , SMS_R_System.Client 
+FROM SMS_R_System
+WHERE SMS_R_System.ResourceId not IN ( SELECT DISTINCT SMS_R_SYSTEM.ResourceID
+    FROM SMS_R_System
+        LEFT JOIN SMS_UserMachineRelationship
+        ON SMS_UserMachineRelationship.ResourceID = SMS_R_System.ResourceId
+    WHERE (SMS_UserMachineRelationship.Sources = 4 OR SMS_UserMachineRelationship.Sources = 6 OR SMS_UserMachineRelationship.Sources = 2) )
+    AND SMS_R_System.Client = 1
+    AND DATEDIFF(dd, SMS_G_System_OPERATING_SYSTEM.InstallDate, GetDate()) < 30
